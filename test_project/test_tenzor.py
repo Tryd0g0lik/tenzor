@@ -52,4 +52,11 @@ class TestTenzor(TenzorPage):
 	# def test_find_link_contacPage(self, browser):
 
 
+@pytest.fixture(scope="class")
+def browser():
+    tenzor = TestTenzor()
+    yield tenzor
+    tenzor.close_test()
 
+def test_find_link_contacPage(browser):
+    browser.test_find_anchor("Контакты")
