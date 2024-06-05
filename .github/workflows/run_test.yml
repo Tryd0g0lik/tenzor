@@ -1,0 +1,40 @@
+name: Auto-test
+on:
+  #  push
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        descriptions: Choose target
+        required: true # Here is waiting the user's choice
+        default: first_test
+        type: choice
+        options:
+          - first_test
+          - second_test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Chrome
+        run: sudo apt-get install google-chrome-stable
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run first_tests
+        if: "github.event.inputs.deployment_target == 'first_test'"
+        run: pytest test-project/test_tenzor.py::open_page_byRef
+
+#      - name: Run second_tests
+#        if: "github.event.inputs.deployment_target == 'second_test'"
+#        run: pytest
