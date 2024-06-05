@@ -1,0 +1,6 @@
+*
+
+!test-project
+!test-project/**
+!.gitignore
+!requirements.txt
