@@ -33,7 +33,7 @@ jobs:
 
       - name: Run first_tests
         if: "github.event.inputs.deployment_target == 'first_test'"
-        run: pytest test-project/test_tenzor.py::open_page_byRef
+        run: pytest test_project/test_tenzor.py::open_page_byRef
 
 #      - name: Run second_tests
 #        if: "github.event.inputs.deployment_target == 'second_test'"

@@ -1,6 +1,11 @@
 *
+!.github
+!.github/**/*
 
-!test-project
-!test-project/**
+!test_project
+!test_project/**
 !.gitignore
 !requirements.txt
+
+test_project/__pycache__
+test_project/.pytest_cache
