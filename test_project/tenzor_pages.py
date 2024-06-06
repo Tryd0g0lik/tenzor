@@ -3,9 +3,10 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from test_project.interfaces import Refereces
 
 class TenzorPage:
-	def __init__(self, urls: str = 'https://sbis.ru/'):
+	def __init__(self, urls: str = Refereces.LINK_SBIS):
 		self.urls = urls;
 		self.run_browser()
 		self.found_selector = None
@@ -14,6 +15,7 @@ class TenzorPage:
 		options = Options()
 		options.add_argument('--headless')
 		self.driver = webdriver.Chrome(options=options) #.Chrome()
+		self.driver.set_page_load_timeout(30)
 
 	def open_page_byRef(self) -> None:
 		driver = self.driver
@@ -33,7 +35,7 @@ class TenzorPage:
 		driver = self.driver
 		found_selector = None
 
-		if ((self.urls.rfind('https://tensor.ru/') >= 0) or (self.urls.rfind('https://tensor.ru/about') >= 0)):
+		if ((self.urls.rfind(Refereces.LINK_TENZOR) >= 0) or (self.urls.rfind(Refereces.LINK_TEMZOR_ABOUT) >= 0)):
 			''' Step 3 & 4 & 5'''
 			driver.execute_script("window.scrollTo(0, window.innerHeight)")
 
@@ -57,20 +59,25 @@ class TenzorPage:
 
 			else:
 				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
-		elif self.urls.rfind('https://sbis.ru/contacts/54-novosibirskaya-oblast') >= 0:
+		elif self.urls.rfind(Refereces.LINK_CONTACTS_CHILD) >= 0:
 			''' Step 2'''
 			try:
 				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
 			except Exception as e:
 				print(f"Error - something wrong: {e}")
 
-		elif self.urls.rfind('https://sbis.ru/') >= 0:
+		elif self.urls.rfind(Refereces.LINK_SBIS) >= 0:
 			''' Step 1'''
 			try:
 				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
 			except Exception as e:
 				print(f"Error Somthing wrong! Element was not found: {e}")
-
+		else:
+			''' Step 1'''
+			try:
+				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
+			except Exception as e:
+				print(f"Error Somthing wrong! Element was not found: {e}")
 		self.driver = driver
 		return found_selector
 
@@ -78,8 +85,7 @@ class TenzorPage:
 		self.driver.close()
 
 	def move_by_link(self, selector):
-		self.found_selector = self.find_selector(selector, 10)
-		text_found = ''
+		self.found_selector = self.find_selector(selector, 20)
 		if ((type(self.found_selector) != str) and
 			(type(self.found_selector) != list) and
 			(bool(self.found_selector.text)) and
