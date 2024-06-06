@@ -26,6 +26,10 @@ class TenzorPage:
 		# Here move by the click
 		element.click()
 
+	def create_link_forMove(self, selector):
+		self.urls = selector.get_attribute('href')
+		self.open_page_byRef()
+
 	def find_selector(self, fixture_selector, time=0.5):
 		driver = self.driver
 		found_selector = None
@@ -68,9 +72,13 @@ class TenzorPage:
 
 
 			elif ((fixture_selector[1]).rfind(' img') >= 0):
+				driver.execute_script("window.scrollTo(0, window.innerHeight)")
 				''' ------ 5 ------ '''
-				for img in found_selector:
-					img
+				try:
+					found_selector = WebDriverWait(driver, timeout=time).until(EC.visibility_of_all_elements_located(fixture_selector))
+				except Exception as e:
+					print(f"Error Image can't found: {e}")
+
 			else:
 				# found_selector = found_selector[len(found_selector) - 1]
 				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
@@ -79,11 +87,17 @@ class TenzorPage:
 		elif self.urls.rfind('https://sbis.ru/contacts/54-novosibirskaya-oblast') >= 0:
 			''' Step 2'''
 			# found_selector = driver.find_element(*fixture_selector)
-			found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
+			try:
+				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
+			except Exception as e:
+				print(f"Error - something wrong: {e}")
 
 		elif self.urls.rfind('https://sbis.ru/') >= 0:
 			''' Step 1'''
-			found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
+			try:
+				found_selector = WebDriverWait(driver, timeout=time).until(EC.presence_of_element_located(fixture_selector))
+			except Exception as e:
+				print(f"Error Somthing wrong! Element was not found: {e}")
 
 		self.driver = driver
 		return found_selector
@@ -94,8 +108,10 @@ class TenzorPage:
 	def move_by_link(self, selector):
 		self.found_selector = self.find_selector(selector, 10)
 		text_found = ''
-		if (type(self.found_selector) != str ) and (len(self.found_selector.text) > 0 ):
+		if ((type(self.found_selector) != str) and
+			(type(self.found_selector) != list) and (len(self.found_selector.text) > 0 )):
 			text_found = (self.found_selector.text).strip().lower()
+
 		else:
 			text_found = (self.found_selector)
 

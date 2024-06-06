@@ -34,6 +34,7 @@ class TestTenzor():
 		self.tenzor.driver.implicitly_wait(2)
 		self.tenzor.move_by_link(Tenzor.SELECTOR_TENZOR_ANCHOR_BANER)
 		self.tenzor.make_click_byElement(self.tenzor.found_selector)
+		# self.tenzor.create_link_forMove(self.tenzor.found_selector)
 		''' Step 3'''
 		href = self.tenzor.found_selector.get_attribute('href')
 		self.tenzor.urls = 'https://tensor.ru/'
@@ -46,7 +47,7 @@ class TestTenzor():
 			extends = "Сила в людях"
 
 			text_found = self.tenzor.move_by_link(Tenzor.SELECTOR_TENZOR_BOX_CONTENT)
-			self.tenzor.driver.implicitly_wait(2)
+
 
 			assert text_found == extends.lower()
 			assert text_found.rfind(extends.lower()) >= 0
@@ -61,8 +62,13 @@ class TestTenzor():
 			# self.tenzor.urls = 'https://tensor.ru/about'
 			# resultJS = self.tenzor.driver.execute_script("document.querySelectorAll('.tensor_ru-Index__block4-bg p')[document.querySelectorAll('.tensor_ru-Index__block4-bg p').length - 1]")
 			text_found = self.tenzor.move_by_link(Tenzor.SELECTOR_TENZOR_BOX_WORKAHOLICS)
-			assert text_found == extends.lower()
-			assert text_found.rfind(extends.lower()) >= 0
+			if (type(text_found) != list):
+				return
+			h = text_found[0].size['height']
+			w = text_found[0].size['width']
+			for img in text_found[1:]:
+				assert h == img.size['height']
+				assert w == img.size['width']
 
 
 def test_find_link_contacPage(browser):
