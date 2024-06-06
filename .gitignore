@@ -6,6 +6,8 @@
 !test_project/**
 !.gitignore
 !requirements.txt
+!*.png
+!*.md
 
 test_project/__pycache__
 test_project/.pytest_cache
