@@ -28,9 +28,11 @@ class TestTenzor():
 		assert text_found == extends.lower()
 		assert text_found.rfind(extends.lower()) >= 0
 
+	def test_find_banner(self):
 		''' Step 2'''
 		self.tenzor.urls = 'https://sbis.ru/contacts/54-novosibirskaya-oblast'
-		self.tenzor.make_click_byElement(self.tenzor.found_selector)
+		# self.tenzor.make_click_byElement(self.tenzor.found_selector)
+		self.tenzor.open_page_byRef()
 		self.tenzor.driver.implicitly_wait(2)
 		self.tenzor.move_by_link(Tenzor.SELECTOR_TENZOR_ANCHOR_BANER)
 		self.tenzor.make_click_byElement(self.tenzor.found_selector)
@@ -42,6 +44,10 @@ class TestTenzor():
 		assert href == self.tenzor.urls.lower()
 		assert href.rfind(self.tenzor.urls.lower()) >= 0
 
+	# def test_find_boxContent(self):
+	# 	self.tenzor.urls = 'https://tensor.ru/'
+		href = self.tenzor.found_selector.get_attribute('href')
+		self.tenzor.urls = href #'https://tensor.ru/'
 		self.tenzor.open_page_byRef()
 		if href.rfind(self.tenzor.urls.lower()) >= 0:
 			extends = "Сила в людях"
@@ -57,6 +63,7 @@ class TestTenzor():
 			self.tenzor.urls = 'https://tensor.ru/about'
 			self.tenzor.move_by_link(Tenzor.SELECTOR_TENZOR_BOX_CONTENT_LINK)# assert text_found.rfind(extends.lower()) >= 0
 
+	def check_sizes_ofIng(self):
 		if (self.tenzor.urls.rfind('https://tensor.ru/about') >= 0):
 			''' Step 5'''
 			# self.tenzor.urls = 'https://tensor.ru/about'

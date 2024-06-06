@@ -109,7 +109,9 @@ class TenzorPage:
 		self.found_selector = self.find_selector(selector, 10)
 		text_found = ''
 		if ((type(self.found_selector) != str) and
-			(type(self.found_selector) != list) and (len(self.found_selector.text) > 0 )):
+			(type(self.found_selector) != list) and
+			(bool(self.found_selector.text)) and
+			(len(self.found_selector.text) > 0 )):
 			text_found = (self.found_selector.text).strip().lower()
 
 		else:
